@@ -1,17 +1,16 @@
 import streamlit as st
 import pandas as pd
 import gspread
+from google.oauth2.service_account import Credentials
 
 st.title("📊 Google Sheet Viewer & Updater")
 
-# Load service account credentials from Streamlit secrets
-service_account_info = dict(st.secrets["gsheets"])
-gc = gspread.service_account_from_dict(service_account_info)
+# Load credentials from Streamlit secrets
+creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+gc = gspread.authorize(creds)
 
-# Google Sheet ID (from secrets.toml or hardcode if needed)
-spreadsheet_id = st.secrets["gsheets"]["spreadsheet_id"]
-
-# Open the spreadsheet
+# Open Google Sheet
+spreadsheet_id = "1U2zpmiviZajGTyEfmKIu0jM2YeaTkOmFDLnysmcaT7A"
 sh = gc.open_by_key(spreadsheet_id)
 worksheet = sh.sheet1
 
@@ -25,19 +24,18 @@ st.subheader("Current Data")
 df = get_data()
 st.dataframe(df)
 
-# Section to add a new user
 st.subheader("Add a New User")
+# Input fields
 name = st.text_input("Name")
 pet = st.text_input("Pet")
 
 # Add button
 if st.button("Add User"):
     if name and pet:
-        # Append new row to Google Sheet
         worksheet.append_row([name, pet])
         st.success(f"Added {name} with pet {pet}!")
 
-        # Refresh data
+        # Refresh and show updated data
         df = get_data()
         st.dataframe(df)
     else:
