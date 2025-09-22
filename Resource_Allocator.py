@@ -13,7 +13,7 @@ gc = gspread.authorize(creds)
 spreadsheet_id = st.secrets["gsheets"]["spreadsheet_id"]
 
 # Open the spreadsheet
-sh = gc.open_by_key(spreadsheet_id)
+sh = gc.open_by_key(st.secrets["gsheets"]["spreadsheet_id"])
 worksheet = sh.sheet1
 
 # Function to read data
