@@ -6,11 +6,13 @@ from google.oauth2.service_account import Credentials
 st.title("📊 Google Sheet Viewer & Updater")
 
 # Load credentials from Streamlit secrets
-creds = Credentials.from_service_account_info(st.secrets["gcp_service_account"])
+creds = Credentials.from_service_account_info(st.secrets["gsheets"])
 gc = gspread.authorize(creds)
 
-# Open Google Sheet
-spreadsheet_id = "1U2zpmiviZajGTyEfmKIu0jM2YeaTkOmFDLnysmcaT7A"
+# Google Sheet ID (from your secrets or hardcoded)
+spreadsheet_id = st.secrets["gsheets"]["spreadsheet_id"]
+
+# Open the spreadsheet
 sh = gc.open_by_key(spreadsheet_id)
 worksheet = sh.sheet1
 
