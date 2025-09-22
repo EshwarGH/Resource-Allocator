@@ -9,11 +9,9 @@ st.title("📊 Google Sheet Viewer & Updater")
 creds = Credentials.from_service_account_info(st.secrets["gsheets"])
 gc = gspread.authorize(creds)
 
-# Google Sheet ID (from your secrets or hardcoded)
-spreadsheet_id = st.secrets["gsheets"]["spreadsheet_id"]
-
-# Open the spreadsheet
-sh = gc.open_by_key(st.secrets["gsheets"]["spreadsheet_id"])
+# Open the spreadsheet using the URL from secrets
+spreadsheet_url = st.secrets["gsheets"]["spreadsheet_url"]
+sh = gc.open_by_url(spreadsheet_url)
 worksheet = sh.sheet1
 
 # Function to read data
